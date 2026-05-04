@@ -6,6 +6,17 @@ export interface Inquilino {
   status: boolean
 }
 
+export interface SpringPage<T> {
+  content: T[]
+  totalElements: number
+  totalPages: number
+  number: number
+  size: number
+  first: boolean
+  last: boolean
+  numberOfElements: number
+}
+
 export interface InquilinoDetalhe {
   id: number
   nome: string

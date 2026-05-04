@@ -1,4 +1,4 @@
-import { Pencil, Trash2 } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Pencil, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Table,
@@ -12,21 +12,37 @@ import type { Inquilino } from './types'
 
 const SKELETON_ROWS = 5
 
+interface PaginationInfo {
+  page: number
+  totalPages: number
+  totalElements: number
+  pageSize: number
+}
+
 interface InquilinosTableProps {
   inquilinos: Inquilino[]
   isLoading: boolean
   error: string
-  onEdit:   (inquilino: Inquilino) => void
-  onDelete: (inquilino: Inquilino) => void
+  pagination: PaginationInfo
+  onEdit:       (inquilino: Inquilino) => void
+  onDelete:     (inquilino: Inquilino) => void
+  onPageChange: (page: number) => void
 }
 
 export function InquilinosTable({
   inquilinos,
   isLoading,
   error,
+  pagination,
   onEdit,
   onDelete,
+  onPageChange,
 }: InquilinosTableProps) {
+  const { page, totalPages, totalElements, pageSize } = pagination
+
+  const start = totalElements === 0 ? 0 : page * pageSize + 1
+  const end   = Math.min((page + 1) * pageSize, totalElements)
+
   return (
     <div className="rounded-lg border border-border bg-card">
       <Table>
@@ -61,7 +77,7 @@ export function InquilinosTable({
           ) : inquilinos.length === 0 ? (
             <TableRow>
               <TableCell colSpan={6} className="h-32 text-center text-sm text-muted-foreground">
-                Nenhum inquilino cadastrado.
+                Nenhum inquilino encontrado.
               </TableCell>
             </TableRow>
           ) : (
@@ -106,6 +122,39 @@ export function InquilinosTable({
           )}
         </TableBody>
       </Table>
+
+      {/* Paginação */}
+      <div className="flex items-center justify-between border-t border-border px-4 py-3">
+        <p className="text-sm text-muted-foreground">
+          {totalElements === 0
+            ? 'Nenhum resultado'
+            : `Mostrando ${start}–${end} de ${totalElements} resultado${totalElements !== 1 ? 's' : ''}`
+          }
+        </p>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="icon-sm"
+            aria-label="Página anterior"
+            onClick={() => onPageChange(page - 1)}
+            disabled={page === 0 || isLoading}
+          >
+            <ChevronLeft />
+          </Button>
+          <span className="min-w-[4rem] text-center text-sm text-muted-foreground">
+            {totalPages === 0 ? '0 / 0' : `${page + 1} / ${totalPages}`}
+          </span>
+          <Button
+            variant="outline"
+            size="icon-sm"
+            aria-label="Próxima página"
+            onClick={() => onPageChange(page + 1)}
+            disabled={page >= totalPages - 1 || isLoading}
+          >
+            <ChevronRight />
+          </Button>
+        </div>
+      </div>
     </div>
   )
 }
