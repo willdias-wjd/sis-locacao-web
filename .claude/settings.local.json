@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(npm list *)",
+      "Bash(npm install *)",
+      "Bash(node *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Projetos\\\\Backend\\\\Java\\\\SisLocacao\\\\web\" -Recurse -Directory)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(xargs grep *)",
+      "Bash(mvn compile *)",
+      "Bash(Select-Object -First 20)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Projetos\\\\Backend\\\\Java\\\\SisLocacao\\\\web\" -Recurse -Directory | Select-Object -First 20 | ForEach-Object { $_.FullName })",
+      "Bash(Sort)"
+    ]
+  }
+}
